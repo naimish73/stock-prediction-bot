@@ -1,0 +1,6 @@
+yfinance
+streamlit
+pandas
+pandas-ta
+deta
+python-dotenv
