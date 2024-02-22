@@ -7,25 +7,13 @@ import streamlit as st
 import plotly.graph_objects as go
 from db import fetch_stocks_dec
 
-st.session_state['s']= 0
-if st.session_state.s==0:
-    st.session_state.s+=1
-    try:
-        stocks= fetch_stocks_dec()
-        symbols = stocks.keys()
-        companies = stocks.values()
-    except:
-        st.write("Error in fetching data from database")
-        st.stop()
-
-company=st.selectbox("Select Company",companies)
-symbol = list(stocks.keys())[list(stocks.values()).index(company)]
-
-st.write(f"Selected Company: {symbol}")
 
 
 start = dt.datetime.now().strftime('%Y-%m-%d')
 end = (dt.datetime.now() + dt.timedelta(days=1)).strftime('%Y-%m-%d')
+
+
+
 
 def Fetch_data(symbol,timeframe):
     ticker = yf.Ticker(symbol)
@@ -43,10 +31,7 @@ def Fetch_data(symbol,timeframe):
     return merged_df
 
 
-df=Fetch_data(symbol,"1m")
-st.write(df)
-
-def plot_graph():
+def plot_graph(df):
     fig = go.Figure()
 
     # Plot close line
@@ -60,4 +45,26 @@ def plot_graph():
     # Show the plot
     st.plotly_chart(fig)
 
-plot_graph()
+def main_app():
+    st.session_state['s']= 0
+    if st.session_state.s==0:
+        st.session_state.s+=1
+        try:
+            stocks= fetch_stocks_dec()
+            symbols = stocks.keys()
+            companies = stocks.values()
+        except:
+            st.write("Error in fetching data from database")
+            st.stop()
+
+    company=st.selectbox("Select Company",companies)
+    symbol = list(stocks.keys())[list(stocks.values()).index(company)]
+
+    with st.empty():
+        st.header(company)
+        df = Fetch_data(symbol, "1m")
+        st.write(df)
+        plot_graph(df)
+
+
+main_app()
