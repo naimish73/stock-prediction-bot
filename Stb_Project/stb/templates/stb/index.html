@@ -1,0 +1,13 @@
+
+  {% extends "stb/base.html" %}
+
+  {% block content %}
+  
+    {% if searched_stock %}
+      {{ searched_stock }}
+      {{ searched_stock_sym }}
+    {% endif %}
+    
+  {% endblock %}
+
+
