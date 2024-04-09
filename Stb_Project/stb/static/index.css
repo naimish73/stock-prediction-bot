@@ -1,0 +1,74 @@
+/* index.css */
+
+/* Define styles for the card-like layout */
+.card {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+/* Define styles for the title */
+.font-weight-bold {
+    font-weight: bold;
+    font-size: 1.2rem; /* Adjust size as needed */
+}
+
+/* Define styles for the value */
+.card p {
+    font-size: 1rem; /* Adjust size as needed */
+    margin-bottom: 5px;
+}
+
+h1 {
+    background-color: #f77f00; /* Vivid orange */
+    padding: 10px;
+    color: white;
+    text-align: center;
+    border-radius: 5px;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 30px;
+    margin-bottom:  100px;
+    height: auto;
+    width: 120vh;
+    background-color: #050505; /* Vibrant yellow */
+}
+
+.row {
+    justify-content: center;
+    
+    flex-wrap: wrap;
+    padding: 80px 20px;
+    
+    
+}
+
+
+.col-md-4 p{
+    justify-content: center;
+}
+
+/* Apply colors to metrics */
+.container .card:nth-child(odd) {
+    background-color: #87ceeb; /* Sky blue */
+}
+
+.container .card:nth-child(even) {
+    background-color: #98fb98; /* Fresh green */
+}
+
+.busionessSummary {
+    padding: 30px 30px;
+    margin: 60px 60px;
+    border-radius: 10px;
+    background-color: #4f8ef2;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    line-height: 1.6; /* Increase line height for better readability */
+    overflow-y: auto; /* Add vertical scrollbar if content overflows */
+    max-height: 70vh; /* Limit the maximum height to allow scrolling */
+}
