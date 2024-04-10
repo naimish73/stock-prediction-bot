@@ -92,15 +92,6 @@ print(response.text)
 
 # print(response.text)
 """
-def base(request):
-    stocks = Stock.objects.all()
-    
-    # if request.method == 'GET':
-    #     search = request.GET['q']
-    #     stocks = Stock.objects.filter(Q(symbol__icontains=search) | Q(full_name__icontains=search))
-    #     return redirect(request, 'stb/index.html',{'stocks':stocks})
-    return render(request, 'stb/base.html',{'stocks':stocks})
-
 
 def home(request):
     stocks = Stock.objects.all()
@@ -108,6 +99,7 @@ def home(request):
     searched_stock_sym = None
     chart_div = None
     info=None
+    # mpl_fig = None
 
     if 'q' in request.GET:
         search = request.GET['q']
@@ -120,10 +112,13 @@ def home(request):
         fig = get_data.create_graph(searched_stock_sym,timeframe='5m') 
         chart_div = fig.to_html(full_html=True, default_height=700, default_width=1800)
 
+        # mpl finance graph 
+
+        # mpl_fig = get_data.mpl_graph(searched_stock_sym,timeframe='5m')
+
         #Searched stocks info
         info = get_data.get_info(searched_stock_sym)
-        print(info)
-
+      
     else:
         stocks = Stock.objects.all()
 
