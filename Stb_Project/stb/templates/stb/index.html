@@ -15,6 +15,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script> 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.js"></script>
 
+
+      <!-- For plotting graph -->
+      <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
 </head>
 <body>
     <!-- Navbar -->
@@ -22,10 +26,10 @@
       <a class="active item" href="{% url "Home" %}">
         Home
       </a>
-      <a class="item">
+      <a class="item" href="{% url "technical-analysis" %}">
         Technical Analysis
       </a>
-      <a class="item">
+      <a class="item" href="{% url "fundamental-analysis" %}">
         Fundamental Analysis
       </a>
       <a class="item" href="{% url "About-Us" %}">
@@ -71,8 +75,6 @@
 
       {% block content %}
       
-      <!-- For plotting graph -->
-      <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
       
       {% if searched_stock %}
       <div class="ui sizer vertical segment">
