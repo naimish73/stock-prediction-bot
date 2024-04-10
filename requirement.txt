@@ -1,6 +1,0 @@
-yfinance
-streamlit
-pandas
-pandas-ta==0.3.14b
-deta
-python-dotenv
