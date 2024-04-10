@@ -3,7 +3,7 @@
 import yfinance as yf
 import pandas as pd
 from plotly import graph_objs as go
-import mplfinance as mpf
+# import mplfinance as mpf
 
 def get_info(symbol):
     ticker = yf.Ticker(symbol)
@@ -61,17 +61,4 @@ def create_graph(symbol,timeframe='1m'):
     layout = go.Layout(xaxis=dict(title='Date'), yaxis=dict(title='Price', side='right'))
     fig = go.Figure(data=[candlestick], layout=layout)
     return fig
-        
-def mpl_graph(symbol,timeframe='1m'):
-    ticker = yf.Ticker(symbol)
-    data = ticker.history(period='1d', interval=timeframe)
-    data['Date'] = data.index
-    data['Date'] = pd.to_datetime(data['Date'])
-    data['Date'] = data['Date'].apply(lambda x: x.strftime('%Y-%m-%d %H:%M:%S'))
-    data = data[['Date','Open','High','Low','Close']]
-    data = data.rename(columns={'Date':'Date','Open':'open','High':'high','Low':'low','Close':'close'})
-    fig, ax = mpf.plot(data, type='candle', show_nontrading=True, returnfig=True)
-    chart = mpf.make_mpf_style(base_mpf_style='yahoo', rc={'font.size': 6})
-    mplfinance_html = mpf.plot_html(fig, rc=chart)
 
-    return mplfinance_html 
