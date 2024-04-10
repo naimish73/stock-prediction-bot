@@ -13,7 +13,7 @@ from .models import Stock
 load_dotenv("/home/rahul/Desktop/Rahul/DE SEM 6/stock-prediction-bot/Stb_Project/.env")
 
 
-DETA_KEY = os.environ.get("DETA_KEY")
+DETA_KEY =  os.getenv('deta_key')
 
 
 
