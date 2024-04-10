@@ -18,11 +18,11 @@ load_dotenv()
 api_key = os.getenv('upstox_api_key')
 secret_key = os.getenv('upstox_secret_key')
 redirect_url='http://127.0.0.1:8000/'
-authorization_code='s888eL'
+authorization_code='IQ_wGH'
 headers = {
         'accept': 'application/json',
         'Content-Type': 'application/x-www-form-urlencoded',
-    }
+}
 
 data = {
     'code': authorization_code,
@@ -38,13 +38,13 @@ def token():
     url = 'https://api.upstox.com/v2/login/authorization/token'
     
 
-    response = requests.post(url, headers=headers, data=data)
+    response = requests.post(url, headers=headers, data=pyload)
 
     return response.json().get('access_token')
 
     
 
-access_token=token()
+access_token="eyJ0eXAiOiJKV1QiLCJrZXlfaWQiOiJza192MS4wIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIzR0FVNjMiLCJqdGkiOiI2NjE2MjYyZGJjNzYxMzMxNDk3ODJiZWIiLCJpc011bHRpQ2xpZW50IjpmYWxzZSwiaXNBY3RpdmUiOnRydWUsInNjb3BlIjpbImludGVyYWN0aXZlIiwiaGlzdG9yaWNhbCJdLCJpYXQiOjE3MTI3Mjc1OTcsImlzcyI6InVkYXBpLWdhdGV3YXktc2VydmljZSIsImV4cCI6MTcxMjc4NjQwMH0.ov8V1p6GgKc9fSRXTNK1j8gCTKgTDXDMxp0509Wr92E"#token()
 # print("Access Token :")
 print(access_token)
 
@@ -52,12 +52,26 @@ print(access_token)
 import requests
 
 url = 'https://api.upstox.com/v2/market-quote/quotes?instrument_key=NSE_EQ%7CINE848E01016,NSE_EQ|INE669E01016'
+
+market_feed_url  = "https://api.upstox.com/v2/feed/market-data-feed"
+
 headers = {
     'Accept': 'application/json',
     'Authorization': f'Bearer {access_token}'
 }
 
-response = requests.get(url, headers=headers)
+pyload={
+  "guid": "someguid",
+  "method": "sub",
+  "data": {
+    "mode": "full",
+    "instrumentKeys": ["NSE_INDEX|Nifty Bank"]
+  }
+}
+
+# response = requests.get(url, headers=headers)
+response = requests.request("GET", market_feed_url, headers=headers, data=data)
+
 
 print(response.text)
 # import requests
