@@ -2,7 +2,7 @@ from __future__ import print_function
 import os
 from django.shortcuts import render,redirect
 from .models import Stock
-from .utils import get_data
+from .utils import get_data,get_model
 from django.db.models import Q
 import json
 
@@ -93,8 +93,12 @@ print(response.text)
 # print(response.text)
 """
 
+
+
+
+
 def home(request):
-    stocks = Stock.objects.all()
+    stocks = Stock.objects.all() # Get all stocks from the database
     search = None
     searched_stock_sym = None
     chart_div = None
@@ -125,6 +129,35 @@ def home(request):
 
     data = {'stocks': stocks, 'searched_stock': search, 'searched_stock_sym': searched_stock_sym, 'chart_div': chart_div, 'info': info}
     return render(request, 'stb/index.html', data)
+
+
+def ta(request):
+    stocks_list = Stock.objects.all() # Get all stocks from the database
+    
+    # searched_stock = None
+    # searched_stock_sym = None
+    # decision_tree_chart = None
+    # if 'selected_stock' in request.POST:
+    #     searched_stock_sym = request.POST.get('selected_stock')
+    #     print(searched_stock_sym)
+    #     print(type(searched_stock_sym))
+    #     searched_stock= Stock.objects.filter(symbol__icontains=searched_stock_sym).values_list('full_name', flat=True)[0]
+    #     fig1= get_model.fetch_data_and_predict('ITC.NS')
+
+    #     decision_tree_chart = fig1.to_html(full_html=True, default_height=700, default_width=1800)
+    fig1= get_model.fetch_data_and_predict('^NSEI','Decision Tree Model')
+
+    decision_tree_chart = fig1.to_html(full_html=True, default_height=700, default_width=1800)
+    decision1_tree_chart = fig1.to_html(full_html=True, default_height=700, default_width=1800)
+    decision2_tree_chart = fig1.to_html(full_html=True, default_height=700, default_width=1800)
+    decision3_tree_chart = fig1.to_html(full_html=True, default_height=700, default_width=1800)
+        
+    data={'decision_tree_chart':decision_tree_chart,'decision1_tree_chart':decision1_tree_chart,'decision2_tree_chart':decision2_tree_chart,'decision3_tree_chart':decision3_tree_chart}
+    return render(request, 'stb/technical.html',data)
+
+
+def fundamental(request):
+    return render(request, 'stb/fundamental.html')
 
 
 def about(request):

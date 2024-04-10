@@ -1,0 +1,30 @@
+{% extends "stb/index.html" %}
+
+{% block title %}Technical Analysis{% endblock %}
+
+{% block content %}
+{% comment %} 
+<form method="POST" name="selected_stock">
+    {% csrf_token %}
+    <select class="ui search dropdown" name="selected_stock">
+        {% for stock in stocks_list  %}
+        <option value="{{ stock.symbol }}">{{ stock.full_name }}</option>
+        {% endfor %}
+    </select>
+
+    <script>
+        $('.ui.search.dropdown').dropdown();
+    </script>
+</form> {% endcomment %}
+
+<h1>technical-analysis</h1>
+
+{{ decision_tree_chart|safe }}
+
+{{ decision1_tree_chart|safe }}
+
+{{ decision2_tree_chart|safe }}
+
+{{ decision3_tree_chart|safe }}
+
+{% endblock %}
