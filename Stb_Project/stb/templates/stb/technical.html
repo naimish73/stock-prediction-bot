@@ -3,6 +3,14 @@
 {% block title %}Technical Analysis{% endblock %}
 
 {% block content %}
+
+<script type="text/javascript">
+    // Reload the page every 60 seconds (60000 milliseconds)
+    setTimeout(function() {
+        location.reload();
+    }, 60000);
+</script>
+{{t}}
 {% comment %} 
 <form method="POST" name="selected_stock">
     {% csrf_token %}
@@ -23,8 +31,7 @@
 
 {{ decision1_tree_chart|safe }}
 
-{{ decision2_tree_chart|safe }}
-
-{{ decision3_tree_chart|safe }}
+{{ randomeforest_tree_chart|safe }}
+{{ xgboost_tree_chart|safe }}
 
 {% endblock %}
