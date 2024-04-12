@@ -95,9 +95,21 @@ print(response.text)
 
 
 
+# def base(request):
+#     stocks=Stock.objects.all() 
+#     searched_stock_sym=None
+#     search=None
 
+#     if 'q' in request.GET:
+#         search = request.GET['q']
+#         searched_stock_sym = Stock.objects.filter(full_name__icontains=search).values_list('symbol', flat=True)[0]
+#         search = Stock.objects.filter(full_name__icontains=search).values_list('full_name', flat=True)[0]
+#         return redirect('home',data={'searched_stock_sym':searched_stock_sym})
+        
+#     data={'stocks':stocks,'searched_stock':search,'searched_stock_sym':searched_stock_sym}
+#     return render(request, 'stb/base.html',data)
 
-def home(request):
+def home(request,searched_stock_sym=None):
     stocks = Stock.objects.all() # Get all stocks from the database
     search = None
     searched_stock_sym = None
