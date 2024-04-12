@@ -74,20 +74,23 @@ CustomStrategy_list=[
 
 def create_graph(symbol,CustomStrategy_list=CustomStrategy_list,timeframe='5m'):
 
-        
-
-
     ticker = yf.Ticker(symbol)
-    data = ticker.history(period='2d', interval=timeframe)
+    """
+    Here we will fetch 1 extra day data so tha we can calculate the indicators values because will calculating it wastw the row as its lenght like sma 200 will pust first 200 rows values nan in its column so to avoid that we will get extra data to work on it and then showing only todays data. 
+    """
+    data = ticker.history(period='2d', interval=timeframe) 
     data.reset_index(inplace=True)
     print(data)
     data.drop(columns=['Volume', 'Dividends', 'Stock Splits'],axis=1, inplace=True)
 
+    """
+    This is for the CustomStrategy_list which contains different indicators and they have diffrent length so we are checking if the length is greated then length of data or greater tha 200 then we will raise an error.
+    """
     for candles in CustomStrategy_list:
         try:
             if candles['kind'] in ['sma','rsi','bbands']:
                 l=candles['length']
-                if len(data) <l :
+                if len(data) <l or l>200:
                     print( f"{candles['kind']}_{candles['length']} is not valid !!!!!")
                     raise KeyError
             elif candles['kind'] in ['macd']:
@@ -103,11 +106,13 @@ def create_graph(symbol,CustomStrategy_list=CustomStrategy_list,timeframe='5m'):
     )
 
     data.ta.strategy(CustomStrategy)
-    s=data[data['Datetime']==today]
-    date_index= s.index.item()
-    data= data.iloc[date_index:]
-    print(data.columns) 
-    print(data)
+    s = data[data['Datetime'] == today]
+    if not s.empty:
+        date_index = s.index[0]
+        data = data.iloc[date_index:]
+        
+    else:
+        print("No data available for today's date.")
 
     candlestick = go.Candlestick(x=data.Datetime,
                                  open=data['Open'],
