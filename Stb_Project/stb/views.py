@@ -132,7 +132,11 @@ def home(request):
 
 
 def ta(request):
-    stocks_list = Stock.objects.all() # Get all stocks from the database
+    decision_tree_chart = None
+    decision1_tree_chart = None
+    randomeforest_tree_chart = None
+    xgboost_tree_chart = None
+    # stocks_list = Stock.objects.all() # Get all stocks from the database
     
     # searched_stock = None
     # searched_stock_sym = None
@@ -145,14 +149,17 @@ def ta(request):
     #     fig1= get_model.fetch_data_and_predict('ITC.NS')
 
     #     decision_tree_chart = fig1.to_html(full_html=True, default_height=700, default_width=1800)
-    fig1= get_model.fetch_data_and_predict('^NSEI','Decision Tree Model')
-
-    decision_tree_chart = fig1.to_html(full_html=True, default_height=700, default_width=1800)
+    fig= get_model.DecisionTree_model_predict('^NSEI')
+    fig1= get_model.DecisionTree_predict('^NSEI')
+    fig2= get_model.RandomForest_predict('^NSEI')
+    fig3= get_model.XgBoost_predict('^NSEI')
+    
+    decision_tree_chart = fig.to_html(full_html=True, default_height=700, default_width=1800)
     decision1_tree_chart = fig1.to_html(full_html=True, default_height=700, default_width=1800)
-    decision2_tree_chart = fig1.to_html(full_html=True, default_height=700, default_width=1800)
-    decision3_tree_chart = fig1.to_html(full_html=True, default_height=700, default_width=1800)
-        
-    data={'decision_tree_chart':decision_tree_chart,'decision1_tree_chart':decision1_tree_chart,'decision2_tree_chart':decision2_tree_chart,'decision3_tree_chart':decision3_tree_chart}
+    randomeforest_tree_chart = fig2.to_html(full_html=True, default_height=700, default_width=1800)
+    xgboost_tree_chart = fig3.to_html(full_html=True, default_height=700, default_width=1800)
+    
+    data={'decision_tree_chart':decision_tree_chart,'decision1_tree_chart':decision1_tree_chart,'randomeforest_tree_chart':randomeforest_tree_chart,'xgboost_tree_chart':xgboost_tree_chart}
     return render(request, 'stb/technical.html',data)
 
 
