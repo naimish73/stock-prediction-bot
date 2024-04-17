@@ -13,13 +13,27 @@ import datetime as dt
 # from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 today = dt.date.today().strftime('%Y-%m-%d 09:15:00+05:30')
-# today='2024-04-10 09:15:00+05:30'
-print(today)
+# today='2024-04-12 09:15:00+05:30'
+
+
+def yf_data(symbol,timeframe='1m'):
+
+    ticker = yf.Ticker(symbol)
+    """
+    Here we will fetch 1 extra day data so tha we can calculate the indicators values because will calculating it wastw the row as its lenght like sma 200 will pust first 200 rows values nan in its column so to avoid that we will get extra data to work on it and then showing only todays data. 
+    """
+    data = ticker.history(period='2d', interval=timeframe) 
+    data.reset_index(inplace=True)
+   
+    data.drop(columns=['Volume', 'Dividends', 'Stock Splits'],axis=1, inplace=True)
+   
+    return data
 
 def get_info(symbol):
     ticker = yf.Ticker(symbol)
     data = ticker.info
-    l=['industry' 
+    l=['longName',
+        'industry' 
        ,'website'
       ,'sector' 
       ,'longBusinessSummary' 
@@ -61,12 +75,12 @@ def get_info(symbol):
     return data
 
 CustomStrategy_list=[
-        {"kind": "sma", "length": 30},              #  |================= COMPLETE PLOTTING ==================|
+        {"kind": "sma", "length": 20},              #  |================= COMPLETE PLOTTING ==================|
         {"kind": "sma", "length": 50},              #  |================= COMPLETE PLOTTING ==================|
         # {"kind": "sma", "length": 200},               #  |================= COMPLETE PLOTTING ==================|
         # {"kind": "bbands", "length": 20},
         {"kind": "rsi","length": 14},               #  |================= COMPLETE PLOTTING ==================|
-        {"kind": "macd", "fast": 8, "slow": 21},
+        # {"kind": "macd", "fast": 8, "slow": 21},
         # {"kind": "sma", "close": "volume", "length": 20, "prefix": "VOLUME"},
     ]
     
@@ -74,14 +88,7 @@ CustomStrategy_list=[
 
 def create_graph(symbol,CustomStrategy_list=CustomStrategy_list,timeframe='5m'):
 
-    ticker = yf.Ticker(symbol)
-    """
-    Here we will fetch 1 extra day data so tha we can calculate the indicators values because will calculating it wastw the row as its lenght like sma 200 will pust first 200 rows values nan in its column so to avoid that we will get extra data to work on it and then showing only todays data. 
-    """
-    data = ticker.history(period='2d', interval=timeframe) 
-    data.reset_index(inplace=True)
-    print(data)
-    data.drop(columns=['Volume', 'Dividends', 'Stock Splits'],axis=1, inplace=True)
+    data = yf_data(symbol,timeframe)
 
     """
     This is for the CustomStrategy_list which contains different indicators and they have diffrent length so we are checking if the length is greated then length of data or greater tha 200 then we will raise an error.
@@ -122,16 +129,16 @@ def create_graph(symbol,CustomStrategy_list=CustomStrategy_list,timeframe='5m'):
                                  name='Candlestick')
     
     rsi = go.Scatter(x=data.Datetime, y=data['RSI_14'], mode='lines', name='RSI 14',yaxis='y3')
-    macd1 = go.Scatter(x=data.Datetime, y=data['MACD_8_21_9'], mode='lines', name='MACD_8_21_9',yaxis='y2')
-    macd2 = go.Scatter(x=data.Datetime, y=data['MACDh_8_21_9'], mode='lines', name='MACDh_8_21_9',yaxis='y2')
-    macd3 = go.Scatter(x=data.Datetime, y=data['MACDs_8_21_9'], mode='lines', name='MACDs_8_21_9',yaxis='y2')
+    # macd1 = go.Scatter(x=data.Datetime, y=data['MACD_8_21_9'], mode='lines', name='MACD_8_21_9',yaxis='y2')
+    # macd2 = go.Scatter(x=data.Datetime, y=data['MACDh_8_21_9'], mode='lines', name='MACDh_8_21_9',yaxis='y2')
+    # macd3 = go.Scatter(x=data.Datetime, y=data['MACDs_8_21_9'], mode='lines', name='MACDs_8_21_9',yaxis='y2')
 
-    sma_30 = go.Scatter(x=data.Datetime, y=data['SMA_30'], mode='lines', name='SMA 30')
+    sma_20 = go.Scatter(x=data.Datetime, y=data['SMA_20'], mode='lines', name='SMA 20')
     sma_50 = go.Scatter(x=data.Datetime, y=data['SMA_50'], mode='lines', name='SMA 50')
     # sma_200 = go.Scatter(x=data.Datetime, y=data['SMA_200'], mode='lines', name='SMA 200')
 
 
-    stuff = [candlestick,rsi,macd1,macd2,macd3 ,sma_30,sma_50]
+    stuff = [candlestick,rsi ,sma_20,sma_50]
     layout = go.Layout(
         yaxis3=dict(
             domain=[0, 0.2]
@@ -147,17 +154,3 @@ def create_graph(symbol,CustomStrategy_list=CustomStrategy_list,timeframe='5m'):
     fig = go.Figure(data=stuff, layout=layout)
     # fig.show()
     return fig
-
-# create_graph('INFY.NS',CustomStrategy_list)
-# NOT COMPLETE ( =========================== IN TESTING MODE ==================== )
-def mpl_graph(symbol,timeframe='1m'):
-    ticker = yf.Ticker(symbol)
-    data = ticker.history(period='1d', interval=timeframe)
-    fig,ax=mpf.plot(data,type='candle',mav=(5,10,20),volume=True,style='yahoo',returnfig=True)
-    # html_str = mpld3.fig_to_html(fig)
-
-
-    # return html_str
-
-
-

@@ -1,6 +1,7 @@
 from __future__ import print_function
 import os
 from django.shortcuts import render,redirect
+from django.http import HttpResponseRedirect
 from .models import Stock
 from .utils import get_data,get_model
 from django.db.models import Q
@@ -13,6 +14,8 @@ from upstox_client.rest import ApiException
 from pprint import pprint
 from dotenv.main import load_dotenv
 import requests
+
+
 """
 load_dotenv()
 api_key = os.getenv('upstox_api_key')
@@ -93,61 +96,87 @@ print(response.text)
 # print(response.text)
 """
 
+stocks = Stock.objects.all() # Get all stocks from the database
 
 
-# def base(request):
-#     stocks=Stock.objects.all() 
-#     searched_stock_sym=None
-#     search=None
 
-#     if 'q' in request.GET:
-#         search = request.GET['q']
-#         searched_stock_sym = Stock.objects.filter(full_name__icontains=search).values_list('symbol', flat=True)[0]
-#         search = Stock.objects.filter(full_name__icontains=search).values_list('full_name', flat=True)[0]
-#         return redirect('home',data={'searched_stock_sym':searched_stock_sym})
-        
-#     data={'stocks':stocks,'searched_stock':search,'searched_stock_sym':searched_stock_sym}
-#     return render(request, 'stb/base.html',data)
+def home(request):
+    
+    # Home Page hero section starting
+    Nifty_chart_div = get_data.create_graph('^NSEI',timeframe='1m')
+    Nifty_chart = Nifty_chart_div.to_html(full_html=True, default_height=500, default_width=530)
 
-def home(request,searched_stock_sym=None):
-    stocks = Stock.objects.all() # Get all stocks from the database
-    search = None
-    searched_stock_sym = None
-    chart_div = None
-    info=None
-    # mpl_fig = None
+    BankNifty_chart = get_data.create_graph('^NSEBANK',timeframe='1m')
+    BankNifty_chart = BankNifty_chart.to_html(full_html=True, default_height=700, default_width=1800)
+
+    Sensex_chart = get_data.create_graph('^BSESN',timeframe='1m')
+    Sensex_chart = Sensex_chart.to_html(full_html=True, default_height=700, default_width=1800)
+
+
 
     if 'q' in request.GET:
         search = request.GET['q']
 
-
-        searched_stock_sym = Stock.objects.filter(full_name__icontains=search).values_list('symbol', flat=True)[0]
+        # searched_stock_sym = Stock.objects.filter(full_name__icontains=search).values_list('symbol', flat=True)[0]
         search = Stock.objects.filter(full_name__icontains=search).values_list('full_name', flat=True)[0]
-
-        #Searched stocks graph
-        fig = get_data.create_graph(searched_stock_sym,timeframe='5m') 
-        chart_div = fig.to_html(full_html=True, default_height=700, default_width=1800)
-
-        # mpl finance graph 
-
-        # mpl_fig = get_data.mpl_graph(searched_stock_sym,timeframe='5m')
-
-        #Searched stocks info
-        info = get_data.get_info(searched_stock_sym)
-      
-    else:
-        stocks = Stock.objects.all()
+        # print(searched_stock_sym)
+        charts='/chart/?q='+search
+        return HttpResponseRedirect(charts)
 
 
-    data = {'stocks': stocks, 'searched_stock': search, 'searched_stock_sym': searched_stock_sym, 'chart_div': chart_div, 'info': info}
+    data = {
+        'stocks': stocks,
+        'Nifty_chart':Nifty_chart, 
+        'BankNifty_chart':BankNifty_chart, 
+        'Sensex_chart':Sensex_chart, 
+    }
+
     return render(request, 'stb/index.html', data)
 
+    
+
+def chart(request):
+    chart_div = None
+    info = None
+
+    if 'q' in request.GET:
+        searched_stock = request.GET['q']
+        stock_symbol = Stock.objects.filter(full_name__icontains=searched_stock).values_list('symbol', flat=True)[0]
+
+        #Searched stocks graph
+        fig = get_data.create_graph(stock_symbol,timeframe='5m') 
+        chart_div = fig.to_html(full_html=True, default_height=700, default_width=1800)
+
+        #Searched stocks info
+        info = get_data.get_info(stock_symbol)
+
+    data={
+        'stocks': stocks,
+        'searched_stock': stock_symbol,
+        'chart_div': chart_div,
+        'info': info
+    }
+
+    return render(request, 'stb/charts.html', data)
 
 def ta(request):
     decision_tree_chart = None
     decision1_tree_chart = None
     randomeforest_tree_chart = None
     xgboost_tree_chart = None
+
+
+
+    if 'q' in request.GET:
+        search = request.GET['q']
+
+        # searched_stock_sym = Stock.objects.filter(full_name__icontains=search).values_list('symbol', flat=True)[0]
+        search = Stock.objects.filter(full_name__icontains=search).values_list('full_name', flat=True)[0]
+        # print(searched_stock_sym)
+        charts='/chart/?q='+search
+        return HttpResponseRedirect(charts)
+
+
     # stocks_list = Stock.objects.all() # Get all stocks from the database
     
     # searched_stock = None
@@ -171,13 +200,48 @@ def ta(request):
     randomeforest_tree_chart = fig2.to_html(full_html=True, default_height=700, default_width=1800)
     xgboost_tree_chart = fig3.to_html(full_html=True, default_height=700, default_width=1800)
     
-    data={'decision_tree_chart':decision_tree_chart,'decision1_tree_chart':decision1_tree_chart,'randomeforest_tree_chart':randomeforest_tree_chart,'xgboost_tree_chart':xgboost_tree_chart}
+    data={
+        'stocks':stocks,
+        'decision_tree_chart':decision_tree_chart,
+        'decision1_tree_chart':decision1_tree_chart,
+        'randomeforest_tree_chart':randomeforest_tree_chart,
+        'xgboost_tree_chart':xgboost_tree_chart
+    }
     return render(request, 'stb/technical.html',data)
 
 
 def fundamental(request):
-    return render(request, 'stb/fundamental.html')
+
+
+
+    if 'q' in request.GET:
+        search = request.GET['q']
+
+        # searched_stock_sym = Stock.objects.filter(full_name__icontains=search).values_list('symbol', flat=True)[0]
+        search = Stock.objects.filter(full_name__icontains=search).values_list('full_name', flat=True)[0]
+        # print(searched_stock_sym)
+        charts='/chart/?q='+search
+        return HttpResponseRedirect(charts)
+
+    data={
+        'stocks':stocks
+    }
+    return render(request, 'stb/fundamental.html',data)
 
 
 def about(request):
-    return render(request, 'stb/about.html')
+
+    if 'q' in request.GET:
+        search = request.GET['q']
+
+        # searched_stock_sym = Stock.objects.filter(full_name__icontains=search).values_list('symbol', flat=True)[0]
+        search = Stock.objects.filter(full_name__icontains=search).values_list('full_name', flat=True)[0]
+        # print(searched_stock_sym)
+        charts='/chart/?q='+search
+        return HttpResponseRedirect(charts)
+
+
+    data={
+        'stocks':stocks
+    }
+    return render(request, 'stb/about.html',data)
