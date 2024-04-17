@@ -1,0 +1,42 @@
+{% extends "stb/navbar.html" %}
+
+{% block content %}
+
+
+  <!-- Information to show after query search  -->
+
+  <div class="flex items-center justify-between mb-8">
+    <div>
+      <a href="{{ info.website }}" target="_blank" class="text-xl font-bold text-black no-underline">{{ info.longName }}</a>
+      <span class="text-gray-600">({{ searched_stock }})</span>
+    </div>
+  </div>
+  
+  {{ chart_div|safe }}
+  
+  <!-- Stock Description -->
+  {% if info.quoteType != 'INDEX' and info.longBusinessSummary %}
+    <div class="bg-blue-100 rounded-lg p-6 mb-8">
+      <div class="text-lg font-semibold mb-4">Description</div>
+      <p class="text-gray-800">{{ info.longBusinessSummary }}</p>
+    </div>
+  {% endif %}
+
+  
+
+  <!-- Stock Information -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    {% for key, value in info.items %}
+      {% if key != 'longBusinessSummary' and key != 'website' %}
+        <div class="bg-white rounded-lg shadow-md p-6">
+          <div class="text-lg font-semibold mb-4">{{ key }}</div>
+          <div class="text-gray-600">{{ value }}</div>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+
+          
+  
+
+{% endblock content %}
