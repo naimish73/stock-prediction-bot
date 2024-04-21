@@ -155,3 +155,8 @@ def create_graph(symbol,CustomStrategy_list=CustomStrategy_list,timeframe='5m'):
     fig = go.Figure(data=stuff, layout=layout)
     # fig.show()
     return fig
+
+def quarterly_balance_sheet(symbol):
+    ticker = yf.Ticker(symbol)
+    data = ticker.quarterly_balance_sheet
+    return data
