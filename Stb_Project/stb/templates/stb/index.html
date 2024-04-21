@@ -1,37 +1,14 @@
 {% extends "stb/navbar.html" %}
 
 {% block content %}
-        
-        
-<!-- Home Page Starting Hero Section-->
-<section class="text-gray-400 bg-gray-900 body-font">
-  <div class="container px-5 py-24 mx-auto">
-    <div class="flex flex-col">
-      
-    </div>
-    <div class="flex flex-wrap sm:-m-4 -mx-4 -mb-10 -mt-4">
-      
-        <div class="rounded-lg h-64 overflow-hidden">
-          {% comment %} <img alt="content" class="object-cover object-center h-full w-full" src="https://dummyimage.com/1203x503"> {% endcomment %}
-          {{Nifty_chart|safe}}
-        </div>
-        
-        <div class="rounded-lg h-64 overflow-hidden">
-          {% comment %} <img alt="content" class="object-cover object-center h-full w-full" src="https://dummyimage.com/1204x504">
-           {% endcomment %}
-          {{BankNifty_chart|safe}}
-        </div>
-      
-        <div class="rounded-lg h-64 overflow-hidden">
-          {% comment %} <img alt="content" class="object-cover object-center h-full w-full" src="https://dummyimage.com/1205x505"> {% endcomment %}
-          {{Sensex_chart|safe}}
-        </div>
-        
-      </div>
-    </div>
-  </div>
-</section>
+<h1>Nifty 50</h1>
+{{Nifty_chart|safe}}
+<h1>Bank Nifty </h1>
+
+{{BankNifty_chart|safe}}
+<h1>Sensex</h1>
+
+{{Sensex_chart|safe}}
 
 {% endblock content %}
-</body>
-</html>
+    

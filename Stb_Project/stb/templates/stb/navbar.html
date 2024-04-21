@@ -66,16 +66,21 @@
         <li><a href="{% url "About-Us" %}" class="hover:text-gray-300">About Us</a></li>
       </ul>
     </div>
-
+    
     
     <div class="autocomplete relative">
       <form id="autocomplete-form" class="flex">
-        <input type="text" id="autocomplete-input" name="q" autocomplete="off" name="selectedItem" placeholder="Search Stock..." class="pl-10 pr-12 py-2 w-64 border rounded focus:outline-none focus:border-blue-500">
+        <input type="text" id="autocomplete-input" name="q" autocomplete="off" name="selectedItem" placeholder="Search Stock..." class="pl-10 pr-12 py-2 w-100 border rounded focus:outline-none focus:border-blue-500">
         <i class="fas fa-search search-icon"></i>
         <ul id="autocomplete-list"></ul>
         <button type="submit" class="hidden"></button>
       </form>
     </div>
+    {% if request.user.is_authenticated %}
+      <p>Welcome , {{request.user}}</p>
+    {% endif %}
+    <button ><a href="{% url "logout" %}"> Logout</a></button>
+
   </nav>
 
   <script>
