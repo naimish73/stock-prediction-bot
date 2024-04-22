@@ -4,8 +4,11 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponseRedirect
 from .models import Stock
 from .utils import get_data,get_model
-from django.db.models import Q
-import json
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import authenticate, login , logout
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from .forms import CreateUserForm
 
 #upstox stuff
 import time
@@ -99,12 +102,40 @@ print(response.text)
 stocks = Stock.objects.all() # Get all stocks from the database
 
 
+def signup(request):
+    if request.method == 'POST':
+        form= CreateUserForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username= form.cleaned_data.get('username')
+            messages.success(request,'Account was created for '+ username)
+            return redirect('login')
+    else:
+        form= CreateUserForm()
+    return render(request, 'registration/signup.html', {'form':form})
 
+def Login(request):
+    if request.method == 'POST':
+        username= request.POST.get('username')
+        password= request.POST.get('password')
+        user= authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request,user)
+            return redirect('Home')
+        else:
+            messages.info(request,'Username or Password is incorrect')
+    return render(request, 'registration/login.html')
+
+def logoutUser(request):
+    logout(request)
+    return redirect('login')
+
+@login_required(login_url='login')
 def home(request):
     
     # Home Page hero section starting
     Nifty_chart_div = get_data.create_graph('^NSEI',timeframe='1m')
-    Nifty_chart = Nifty_chart_div.to_html(full_html=True, default_height=500, default_width=530)
+    Nifty_chart = Nifty_chart_div.to_html(full_html=True, default_height=700, default_width=1800)
 
     BankNifty_chart = get_data.create_graph('^NSEBANK',timeframe='1m')
     BankNifty_chart = BankNifty_chart.to_html(full_html=True, default_height=700, default_width=1800)
@@ -134,7 +165,7 @@ def home(request):
     return render(request, 'stb/index.html', data)
 
     
-
+@login_required(login_url='login')
 def chart(request):
     chart_div = None
     info = None
@@ -159,6 +190,7 @@ def chart(request):
 
     return render(request, 'stb/charts.html', data)
 
+@login_required(login_url='login')
 def ta(request):
     decision_tree_chart = None
     decision1_tree_chart = None
@@ -176,29 +208,37 @@ def ta(request):
         charts='/chart/?q='+search
         return HttpResponseRedirect(charts)
 
+    try:
+        xgboost_tree_chart= get_model.XgBoost_predict('^NSEI')
 
-    # stocks_list = Stock.objects.all() # Get all stocks from the database
-    
-    # searched_stock = None
-    # searched_stock_sym = None
-    # decision_tree_chart = None
-    # if 'selected_stock' in request.POST:
-    #     searched_stock_sym = request.POST.get('selected_stock')
-    #     print(searched_stock_sym)
-    #     print(type(searched_stock_sym))
-    #     searched_stock= Stock.objects.filter(symbol__icontains=searched_stock_sym).values_list('full_name', flat=True)[0]
-    #     fig1= get_model.fetch_data_and_predict('ITC.NS')
+    except:
+        pass
 
-    #     decision_tree_chart = fig1.to_html(full_html=True, default_height=700, default_width=1800)
-    fig= get_model.DecisionTree_model_predict('^NSEI')
-    fig1= get_model.DecisionTree_predict('^NSEI')
-    fig2= get_model.RandomForest_predict('^NSEI')
-    fig3= get_model.XgBoost_predict('^NSEI')
+
+    try:
+        randomeforest_tree_chart= get_model.RandomForest_predict('^NSEI')
+
+    except:
+        pass
+
+
+    try:
+
+        decision1_tree_chart= get_model.DecisionTree_predict('^NSEI')
+    except:
+        pass
+
+
+    try:
+        decision_tree_chart= get_model.DecisionTree_model_predict('^NSEI')
+
+    except:
+        pass
     
-    decision_tree_chart = fig.to_html(full_html=True, default_height=700, default_width=1800)
-    decision1_tree_chart = fig1.to_html(full_html=True, default_height=700, default_width=1800)
-    randomeforest_tree_chart = fig2.to_html(full_html=True, default_height=700, default_width=1800)
-    xgboost_tree_chart = fig3.to_html(full_html=True, default_height=700, default_width=1800)
+    decision_tree_chart = decision_tree_chart.to_html(full_html=True, default_height=700, default_width=1800)
+    decision1_tree_chart = decision1_tree_chart.to_html(full_html=True, default_height=700, default_width=1800)
+    randomeforest_tree_chart = randomeforest_tree_chart.to_html(full_html=True, default_height=700, default_width=1800)
+    xgboost_tree_chart = xgboost_tree_chart.to_html(full_html=True, default_height=700, default_width=1800)
     
     data={
         'stocks':stocks,
@@ -209,7 +249,7 @@ def ta(request):
     }
     return render(request, 'stb/technical.html',data)
 
-
+@login_required(login_url='login')
 def fundamental(request):
 
 
@@ -228,7 +268,7 @@ def fundamental(request):
     }
     return render(request, 'stb/fundamental.html',data)
 
-
+@login_required(login_url='login')
 def about(request):
 
     if 'q' in request.GET:

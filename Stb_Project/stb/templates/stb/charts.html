@@ -6,8 +6,19 @@
   <!-- Information to show after query search  -->
 
   <div class="flex items-center justify-between mb-8">
+    <h1 class="text-3xl py-5 px-16 font-bold">
+      <a href="{{ info.website }}" target="_blank">
+        {{ info.longName }}
+      </a>
+      <span class="text-gray-600">
+        ({{ searched_stock }})
+      </span>
+    
+    </h1>
+
     <div>
-      <a href="{{ info.website }}" target="_blank" class="text-xl font-bold text-black no-underline">{{ info.longName }}</a>
+
+      <a href="" target="_blank" class="text-xl font-bold text-black no-underline"></a>
       <span class="text-gray-600">({{ searched_stock }})</span>
     </div>
   </div>
@@ -16,7 +27,7 @@
   
   <!-- Stock Description -->
   {% if info.quoteType != 'INDEX' and info.longBusinessSummary %}
-    <div class="bg-blue-100 rounded-lg p-6 mb-8">
+    <div class="bg-blue-100 rounded-lg p-8 m-5">
       <div class="text-lg font-semibold mb-4">Description</div>
       <p class="text-gray-800">{{ info.longBusinessSummary }}</p>
     </div>

@@ -10,6 +10,7 @@
     /* Additional styles for the autocomplete */
     .autocomplete {
       position: relative;
+      
     }
     .autocomplete input[type="text"] {
       width: 240px;
@@ -56,27 +57,44 @@
   </style>
 </head>
 <body>
-  <nav class="bg-black py-4 px-8 flex justify-between items-center text-white">
-    <div class="flex items-center">
-      <a href="{% url "Home" %}" class="text-2xl font-bold mr-8">STB</a>
-      <ul class="flex space-x-4">
-        <li><a href="{% url "Home"  %}" class="hover:text-gray-300">Home</a></li>
-        <li><a href="{% url "technical-analysis" %}" class="hover:text-gray-300">Technical Analysis</a></li>
-        <li><a href="{% url "fundamental-analysis" %}" class="hover:text-gray-300">Fundamental Analysis</a></li>
-        <li><a href="{% url "About-Us" %}" class="hover:text-gray-300">About Us</a></li>
-      </ul>
+  
+
+<header class=" bg-black text-white body-font">
+  <div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
+    <a class="flex title-font font-medium items-center text-light mb-4 md:mb-0 hover:text-indigo-500" href="{% url "Home" %}">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-10 h-10 text-white p-2 bg-indigo-500 rounded-full" viewBox="0 0 24 24">
+        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+      </svg>
+      <span class="ml-3 text-xl text-light">STB</span>
+    </a>
+    <nav class="md:ml-auto md:mr-auto flex flex-wrap items-center text-base justify-center">
+      <a class="mr-5 hover:text-indigo-500" href="{% url "Home" %}">Home</a>
+      <a class="mr-5 hover:text-indigo-500" href="{% url "technical-analysis" %}">Technical Analysis</a>
+      <a class="mr-5 hover:text-indigo-500" href="{% url "fundamental-analysis" %}">Fundamental Analysis</a>
+      <a class="mr-5 hover:text-indigo-500" href="{% url "About-Us" %}">About Us</a>
+    </nav>
+    
+    
+    <div class="flex justify-between items-center text-white">
+      <div class="autocomplete relative">
+        <form id="autocomplete-form" class="flex">
+          <input type="text" id="autocomplete-input" name="q" autocomplete="off" name="selectedItem" placeholder="Search Stock..." class="pl-10 pr-12 py-2 w-100 border rounded focus:outline-none focus:border-blue-500">
+          <i class="fas fa-search search-icon"></i>
+          <ul id="autocomplete-list"></ul>
+          <button type="submit" class="hidden"></button>
+        </form>
+      </div>
+
+      {% if request.user.is_authenticated %}
+        <p class="px-5">Welcome , {{request.user}}</p>
+      {% endif %}
+      <button class="btnbg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"><a href="{% url "logout" %}"> Logout</a></button>
+
     </div>
 
-    
-    <div class="autocomplete relative">
-      <form id="autocomplete-form" class="flex">
-        <input type="text" id="autocomplete-input" name="q" autocomplete="off" name="selectedItem" placeholder="Search Stock..." class="pl-10 pr-12 py-2 w-64 border rounded focus:outline-none focus:border-blue-500">
-        <i class="fas fa-search search-icon"></i>
-        <ul id="autocomplete-list"></ul>
-        <button type="submit" class="hidden"></button>
-      </form>
-    </div>
-  </nav>
+  </div>
+</header>
+
 
   <script>
     const data = [
@@ -120,115 +138,15 @@
     });
   </script>
   
+
 <!-- For plotting graph -->
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   
 {% block content %}
-        
-        
-{% comment %} <!-- Home Page Starting Hero Section-->
-<section class="text-gray-400 bg-gray-900 body-font">
-  <div class="container px-5 py-24 mx-auto">
-    <div class="flex flex-col">
-      <div class="h-1 bg-gray-800 rounded overflow-hidden">
-        <div class="w-24 h-full bg-pink-500"></div>
-      </div>
-      <div class="flex flex-wrap sm:flex-row flex-col py-6 mb-12">
-        <h1 class="sm:w-2/5 text-white font-medium title-font text-2xl mb-2 sm:mb-0">Space The Final Frontier</h1>
-        <p class="sm:w-3/5 leading-relaxed text-base sm:pl-10 pl-0">Street art subway tile salvia four dollar toast bitters selfies quinoa yuccie synth meditation iPhone intelligentsia prism tofu. Viral gochujang bitters dreamcatcher.</p>
-      </div>
-    </div>
-    <div class="flex flex-wrap sm:-m-4 -mx-4 -mb-10 -mt-4">
-      <div class="p-4 md:w-1/3 sm:mb-0 mb-6">
-        <div class="rounded-lg h-64 overflow-hidden">
-          <img alt="content" class="object-cover object-center h-full w-full" src="https://dummyimage.com/1203x503">
-          {{Nifty_chart|safe}}
-        </div>
-        <h2 class="text-xl font-medium title-font text-white mt-5">Shooting Stars</h2>
-        <p class="text-base leading-relaxed mt-2">Swag shoindxgoitch literally meditation subway tile tumblr cold-pressed. Gastropub street art beard dreamcatcher neutra, ethical XOXO lumbersexual.</p>
-        <a class="text-pink-400 inline-flex items-center mt-3">Learn More
-          <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-2" viewBox="0 0 24 24">
-            <path d="M5 12h14M12 5l7 7-7 7"></path>
-          </svg>
-        </a>
-      </div>
-      <div class="p-4 md:w-1/3 sm:mb-0 mb-6">
-        <div class="rounded-lg h-64 overflow-hidden">
-          <img alt="content" class="object-cover object-center h-full w-full" src="https://dummyimage.com/1204x504">
-          {{BankNifty_chart|safe}}
+      
 
-        </div>
-        <h2 class="text-xl font-medium title-font text-white mt-5">The Catalyzer</h2>
-        <p class="text-base leading-relaxed mt-2">Swag shoindxigoitch literally meditation subway tile tumblr cold-pressed. Gastropub street art beard dreamcatcher neutra, ethical XOXO lumbersexual.</p>
-        <a class="text-pink-400 inline-flex items-center mt-3">Learn More
-          <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-2" viewBox="0 0 24 24">
-            <path d="M5 12h14M12 5l7 7-7 7"></path>
-          </svg>
-        </a>
-      </div>
-      <div class="p-4 md:w-1/3 sm:mb-0 mb-6">
-        <div class="rounded-lg h-64 overflow-hidden">
-          <img alt="content" class="object-cover object-center h-full w-full" src="https://dummyimage.com/1205x505">
-          {{Sensex_chart|safe}}
-        </div>
-        <h2 class="text-xl font-medium title-font text-white mt-5">The 400 Blows</h2>
-        <p class="text-base leading-relaxed mt-2">Swag shoindegoitch literally meditation subway tile tumblr cold-pressed. Gastropub street art beard dreamcatcher neutra, ethical XOXO lumbersexual.</p>
-        <a class="text-pink-400 inline-flex items-center mt-3">Learn More
-          <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-2" viewBox="0 0 24 24">
-            <path d="M5 12h14M12 5l7 7-7 7"></path>
-          </svg>
-        </a>
-      </div>
-    </div>
-  </div>
-</section>
-{% comment %} {{Nifty_chart|safe}} 
-{{BankNifty_chart|safe}} 
-{{Sensex_chart|safe}}  {% endcomment %}
-
-
-
-{% comment %} 
-  <!-- Information to show after query search  -->
-
-    {% if searched_stock %}
-        <div class="flex items-center justify-between mb-8">
-          <div>
-            <a href="{{ info.website }}" target="_blank" class="text-xl font-bold text-black no-underline">{{ searched_stock }}</a>
-            <span class="text-gray-600">({{ searched_stock_sym }})</span>
-          </div>
-        </div>
-        
-        {{ chart_div|safe }}
-        
-        <!-- Stock Description -->
-        {% if info.quoteType != 'INDEX' and info.longBusinessSummary %}
-          <div class="bg-blue-100 rounded-lg p-6 mb-8">
-            <div class="text-lg font-semibold mb-4">Description</div>
-            <p class="text-gray-800">{{ info.longBusinessSummary }}</p>
-          </div>
-        {% endif %}
-    
-        
-  
-        <!-- Stock Information -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {% for key, value in info.items %}
-            {% if key != 'longBusinessSummary' and key != 'website' %}
-              <div class="bg-white rounded-lg shadow-md p-6">
-                <div class="text-lg font-semibold mb-4">{{ key }}</div>
-                <div class="text-gray-600">{{ value }}</div>
-              </div>
-            {% endif %}
-          {% endfor %}
-        </div>
-
-                
-        
-      {% endif %}
-        
-        
-      {% endcomment %}
 {% endblock content %}
+
+
 </body>
 </html>
