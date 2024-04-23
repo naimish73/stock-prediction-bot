@@ -96,48 +96,6 @@
 </header>
 
 
-  <script>
-    const data = [
-      {% for stock in stocks  %}
-      "{{stock.full_name}}",
-      {% endfor %}
-    ];
-
-    const form = document.getElementById("autocomplete-form");
-    const input = document.getElementById("autocomplete-input");
-    const list = document.getElementById("autocomplete-list");
-
-    // Function to populate the autocomplete list
-    function populateAutocomplete() {
-      const val = input.value.toLowerCase();
-      const suggestions = data.filter(item => item.toLowerCase().startsWith(val));
-      const html = suggestions.map(suggestion => `<li>${suggestion}</li>`).join("");
-      list.innerHTML = html;
-      if (suggestions.length > 0) {
-        list.style.display = "block";
-      } else {
-        list.style.display = "none";
-      }
-    }
-
-    // Event listeners
-    input.addEventListener("input", populateAutocomplete);
-    list.addEventListener("click", (event) => {
-      if (event.target.tagName === "LI") {
-        input.value = event.target.textContent;
-        list.style.display = "none";
-        form.submit(); // Submit the form when an item is selected
-      }
-    });
-
-    // Hide autocomplete list when clicking outside the input
-    document.addEventListener("click", (event) => {
-      if (event.target !== input && event.target !== list) {
-        list.style.display = "none";
-      }
-    });
-  </script>
-  
 
 <!-- For plotting graph -->
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
@@ -147,6 +105,48 @@
 
 {% endblock content %}
 
+
+<script>
+  const data = [
+    {% for stock in stocks  %}
+    "{{stock.full_name}}",
+    {% endfor %}
+  ];
+
+  const form = document.getElementById("autocomplete-form");
+  const input = document.getElementById("autocomplete-input");
+  const list = document.getElementById("autocomplete-list");
+
+  // Function to populate the autocomplete list
+  function populateAutocomplete() {
+    const val = input.value.toLowerCase();
+    const suggestions = data.filter(item => item.toLowerCase().startsWith(val));
+    const html = suggestions.map(suggestion => `<li>${suggestion}</li>`).join("");
+    list.innerHTML = html;
+    if (suggestions.length > 0) {
+      list.style.display = "block";
+    } else {
+      list.style.display = "none";
+    }
+  }
+
+  // Event listeners
+  input.addEventListener("input", populateAutocomplete);
+  list.addEventListener("click", (event) => {
+    if (event.target.tagName === "LI") {
+      input.value = event.target.textContent;
+      list.style.display = "none";
+      form.submit(); // Submit the form when an item is selected
+    }
+  });
+
+  // Hide autocomplete list when clicking outside the input
+  document.addEventListener("click", (event) => {
+    if (event.target !== input && event.target !== list) {
+      list.style.display = "none";
+    }
+  });
+</script>
 
 </body>
 </html>
