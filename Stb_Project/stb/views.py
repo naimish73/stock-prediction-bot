@@ -9,6 +9,7 @@ from django.contrib.auth import authenticate, login , logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import CreateUserForm
+import pandas as pd
 
 #upstox stuff
 import time
@@ -192,7 +193,6 @@ def chart(request):
 
 @login_required(login_url='login')
 def ta(request):
-    decision_tree_chart = None
     decision1_tree_chart = None
     randomeforest_tree_chart = None
     xgboost_tree_chart = None
@@ -229,20 +229,12 @@ def ta(request):
         pass
 
 
-    try:
-        decision_tree_chart= get_model.DecisionTree_model_predict('^NSEI')
-
-    except:
-        pass
-    
-    decision_tree_chart = decision_tree_chart.to_html(full_html=True, default_height=700, default_width=1800)
     decision1_tree_chart = decision1_tree_chart.to_html(full_html=True, default_height=700, default_width=1800)
     randomeforest_tree_chart = randomeforest_tree_chart.to_html(full_html=True, default_height=700, default_width=1800)
     xgboost_tree_chart = xgboost_tree_chart.to_html(full_html=True, default_height=700, default_width=1800)
     
     data={
         'stocks':stocks,
-        'decision_tree_chart':decision_tree_chart,
         'decision1_tree_chart':decision1_tree_chart,
         'randomeforest_tree_chart':randomeforest_tree_chart,
         'xgboost_tree_chart':xgboost_tree_chart
@@ -251,6 +243,10 @@ def ta(request):
 
 @login_required(login_url='login')
 def fundamental(request):
+
+    Qdata= get_data.quarterly_balance_sheet('INFY.NS')
+    Qdata.columns = [col.strftime("%b. %d, %Y") if isinstance(col, pd.Timestamp) else col for col in Qdata.columns]
+
 
 
 
@@ -264,7 +260,8 @@ def fundamental(request):
         return HttpResponseRedirect(charts)
 
     data={
-        'stocks':stocks
+        'stocks':stocks,
+        'Qdata':Qdata
     }
     return render(request, 'stb/fundamental.html',data)
 

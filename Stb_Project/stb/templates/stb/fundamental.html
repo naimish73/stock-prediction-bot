@@ -6,35 +6,53 @@
 {% block content %}
 
 
+<div class="container flex mx-auto">
+  <div class="flex border-2 rounded">
+      <button class="flex items-center justify-center px-4 border-r">
+          <svg class="w-6 h-6 text-gray-600" fill="currentColor" xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24">
+              <path
+                  d="M16.32 14.9l5.39 5.4a1 1 0 0 1-1.42 1.4l-5.38-5.38a8 8 0 1 1 1.41-1.41zM10 16a6 6 0 1 0 0-12 6 6 0 0 0 0 12z">
+              </path>
+          </svg>
+      </button>
+      <form id="autocomplete-form" class="flex">
+        <input type="text" id="autocomplete-input" class="px-4 py-2 w-80" placeholder="Search...">
+        <ul id="autocomplete-list"></ul>
 
+      </form>
+  </div>
+</div>
 
-<h1>fundamental-analysis</h1>
-<table class="table-fixed">
-    <thead>
-      <tr>
-        <th class="w-1/2 px-4 py-2">Title</th>
-        <th class="w-1/4 px-4 py-2">Author</th>
-        <th class="w-1/4 px-4 py-2">Views</th>
+<h1 class="text-3xl py-5 px-16 font-bold"><a href=""> Infy  </a></h1>
+
+<div class="container w-full  p-8 m-5">
+<table class="table-auto w-full text-left whitespace-no-wrap">
+  <thead>
+    <tr>
+      <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 rounded-tl rounded-bl"> </th>
+        {% for col in Qdata.columns %}
+        
+        <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 rounded-tl rounded-bl">{{col}}</th>
+        {% endfor %}
       </tr>
     </thead>
     <tbody>
+
+      {% for index, row in Qdata.iterrows %}
       <tr>
-        <td class="border px-4 py-2">Intro to CSS</td>
-        <td class="border px-4 py-2">Adam</td>
-        <td class="border px-4 py-2">858</td>
+        <td class="border px-4 py-2">{{ index }}</td>  {# Assuming index is required, otherwise remove this line #}
+        {% for value in row %}
+        <td class="border px-4 py-2">{{ value }}</td>
+        {% endfor %}
       </tr>
-      <tr class="bg-gray-100">
-        <td class="border px-4 py-2">A Long and Winding Tour of the History of UI Frameworks and Tools and the Impact on Design</td>
-        <td class="border px-4 py-2">Adam</td>
-        <td class="border px-4 py-2">112</td>
-      </tr>
-      <tr>
-        <td class="border px-4 py-2">Intro to JavaScript</td>
-        <td class="border px-4 py-2">Chris</td>
-        <td class="border px-4 py-2">1,280</td>
-      </tr>
+      {% endfor %}
+
     </tbody>
   </table>
+</div>
+
+
 
 
 {% endblock %}

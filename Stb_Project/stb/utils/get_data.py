@@ -13,7 +13,7 @@ import datetime as dt
 # from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 today = dt.date.today().strftime('%Y-%m-%d 09:15:00+05:30')
-today='2024-04-19 09:15:00+05:30'
+# today='2024-04-19 09:15:00+05:30'
 
 
 def yf_data(symbol,timeframe='1m'):
@@ -159,4 +159,7 @@ def create_graph(symbol,CustomStrategy_list=CustomStrategy_list,timeframe='5m'):
 def quarterly_balance_sheet(symbol):
     ticker = yf.Ticker(symbol)
     data = ticker.quarterly_balance_sheet
+    data.fillna(0, inplace=True)
+
     return data
+print(quarterly_balance_sheet('INFY.NS'))
