@@ -25,6 +25,14 @@ Step 3 :
 
 - Then copy the path of `.env` file and give it to  `load_env(copied_path_to_env)` in `Stb_project/stb/db.py` 
 
+- Now we have to follow below command to create model for stocks in sqlite database.
+
+```
+python manage.py makemigrations
+
+python manage.py migrate
+```
+
 ```
 cd Stb_Project
 
