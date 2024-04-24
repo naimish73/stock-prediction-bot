@@ -4,13 +4,14 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponseRedirect
 from .models import Stock
 from .utils import get_data,get_model
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login , logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import CreateUserForm
 import pandas as pd
 
+
+"""
 #upstox stuff
 import time
 import upstox_client
@@ -19,8 +20,6 @@ from pprint import pprint
 from dotenv.main import load_dotenv
 import requests
 
-
-"""
 load_dotenv()
 api_key = os.getenv('upstox_api_key')
 secret_key = os.getenv('upstox_secret_key')
@@ -146,12 +145,9 @@ def home(request):
 
 
 
-    if 'q' in request.GET:
-        search = request.GET['q']
+    if 'q' in request.GET :
 
-        # searched_stock_sym = Stock.objects.filter(full_name__icontains=search).values_list('symbol', flat=True)[0]
-        search = Stock.objects.filter(full_name__icontains=search).values_list('full_name', flat=True)[0]
-        # print(searched_stock_sym)
+        search= request.GET.get('q')
         charts='/chart/?q='+search
         return HttpResponseRedirect(charts)
 
@@ -197,16 +193,12 @@ def ta(request):
     randomeforest_tree_chart = None
     xgboost_tree_chart = None
 
+    if 'q' in request.GET :
 
-
-    if 'q' in request.GET:
-        search = request.GET['q']
-
-        # searched_stock_sym = Stock.objects.filter(full_name__icontains=search).values_list('symbol', flat=True)[0]
-        search = Stock.objects.filter(full_name__icontains=search).values_list('full_name', flat=True)[0]
-        # print(searched_stock_sym)
+        search= request.GET.get('q')
         charts='/chart/?q='+search
         return HttpResponseRedirect(charts)
+
 
     try:
         xgboost_tree_chart= get_model.XgBoost_predict('^NSEI')
@@ -244,39 +236,55 @@ def ta(request):
 @login_required(login_url='login')
 def fundamental(request):
 
-    Qdata= get_data.quarterly_balance_sheet('INFY.NS')
-    Qdata.columns = [col.strftime("%b. %d, %Y") if isinstance(col, pd.Timestamp) else col for col in Qdata.columns]
+    company=None
+    Qdata=None
 
+    if 'q' in request.GET :
 
-
-
-    if 'q' in request.GET:
-        search = request.GET['q']
-
-        # searched_stock_sym = Stock.objects.filter(full_name__icontains=search).values_list('symbol', flat=True)[0]
-        search = Stock.objects.filter(full_name__icontains=search).values_list('full_name', flat=True)[0]
-        # print(searched_stock_sym)
+        search= request.GET.get('q')
         charts='/chart/?q='+search
         return HttpResponseRedirect(charts)
+    
+    if request.method =="GET":
+
+        company_symbol= request.GET.get('companys')
+        
+
+        company = Stock.objects.filter(symbol__icontains=company_symbol).values_list('full_name', flat=True)[0]
+
+        if company_symbol:
+            try :
+                
+                company = Stock.objects.filter(symbol__icontains=company_symbol).values_list('full_name', flat=True)[0]
+                
+                try:
+                    Qdata= get_data.quarterly_balance_sheet(company_symbol)
+                  
+                    Qdata.columns = [col.strftime("%b. %d, %Y") if isinstance(col, pd.Timestamp) else col for col in Qdata.columns]
+
+                except:
+                    pass
+                    
+            except:
+                print(company)
+
 
     data={
         'stocks':stocks,
-        'Qdata':Qdata
+        'Qdata':Qdata,
+        'company':company
     }
     return render(request, 'stb/fundamental.html',data)
 
 @login_required(login_url='login')
 def about(request):
 
-    if 'q' in request.GET:
-        search = request.GET['q']
 
-        # searched_stock_sym = Stock.objects.filter(full_name__icontains=search).values_list('symbol', flat=True)[0]
-        search = Stock.objects.filter(full_name__icontains=search).values_list('full_name', flat=True)[0]
-        # print(searched_stock_sym)
+    if 'q' in request.GET :
+
+        search= request.GET.get('q')
         charts='/chart/?q='+search
         return HttpResponseRedirect(charts)
-
 
     data={
         'stocks':stocks

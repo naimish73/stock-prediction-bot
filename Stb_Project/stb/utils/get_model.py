@@ -50,7 +50,7 @@ def XgBoost_predict(symbol,time_frame='1m'):
     t2 = go.Scatter(x=data.index, y=XgBoostModel_pred, mode='lines', name="Predicted Close", line=dict(color='red'))
 
     # Create layout for the plot
-    layout = go.Layout(title=f'<b >XgBoost Model </b>\t\t\t <div style="float:right;"> <b >Actual Value :</b>  {last_actual_value}  \t\t\t <b>Predicted Value :</b>  {last_predicted_value} \t\t\t <b>Difference(%) : </b>{difference}% </div>', xaxis=dict(title='Date'), yaxis=dict(title='Price'))
+    layout = go.Layout(title=f'<b >XgBoost Model </b>\t\t\t  <b >Actual Value :</b>  {last_actual_value}  \t\t\t <b>Predicted Value :</b>  {last_predicted_value} \t\t\t <b>Difference(%) : </b>{difference}% ', xaxis=dict(title='Date'), yaxis=dict(title='Price'))
     # layout = go.Layout(title=f'<b>Stock Price Prediction With XgBoost Model</b>  <p color="blue">Actual Value :</p> {last_actual_value} <br> <font color="red">Predicted Value :</font> {last_predicted_value} <br> <font color="green">Difference(%) :</font> {difference}%', xaxis=dict(title='Date'), yaxis=dict(title='Price'))
 
     # Combine traces and layout into a figure
@@ -83,7 +83,8 @@ def DecisionTree_predict(symbol,time_frame='1m'):
     t2 = go.Scatter(x=data.index, y=DecisionTree_pred, mode='lines', name="Predicted Close", line=dict(color='red'))
 
     # Create layout for the plot
-    layout = go.Layout(title=f'<b>Stock Price Prediction With Decision1 Tree Model </b>\t\t\t Actual Value : {last_actual_value} \t\t\t Predicted Value : {last_predicted_value} \t\t\t Difference(%) : {difference}% ', xaxis=dict(title='Date'), yaxis=dict(title='Price'))
+    # layout = go.Layout(title=f'<b>Stock Price Prediction With Decision1 Tree Model </b>\t\t\t Actual Value : {last_actual_value} \t\t\t Predicted Value : {last_predicted_value} \t\t\t Difference(%) : {difference}% ', xaxis=dict(title='Date'), yaxis=dict(title='Price'))
+    layout = go.Layout(title=f'<b style="color:\'green\'">Decision Tree Model</b>\t\t\t  <b >Actual Value :</b>  {last_actual_value}  \t\t\t <b>Predicted Value :</b>  {last_predicted_value} \t\t\t <b>Difference(%) : </b>{difference}% ', xaxis=dict(title='Date'), yaxis=dict(title='Price'))
 
     # Combine traces and layout into a figure
     fig = go.Figure(data=[t1, t2], layout=layout)
@@ -114,7 +115,8 @@ def DecisionTree_model_predict(symbol,time_frame='1m'):
     t2 = go.Scatter(x=data.index, y=DecisionTree_pred, mode='lines', name="Predicted Close", line=dict(color='red'))
 
     # Create layout for the plot
-    layout = go.Layout(title=f'<b>Stock Price Prediction With Decision Tree Model</b> \t\t\t Actual Value : {last_actual_value} \t\t\t Predicted Value : {last_predicted_value} \t\t\t Difference(%) : {difference}% ', xaxis=dict(title='Date'), yaxis=dict(title='Price'))
+    # layout = go.Layout(title=f'<b> Decision Tree Model</b> \t\t\t Actual Value : {last_actual_value} \t\t\t Predicted Value : {last_predicted_value} \t\t\t Difference(%) : {difference}% ', xaxis=dict(title='Date'), yaxis=dict(title='Price'))
+    layout = go.Layout(title=f'<b >Decision Tree Model </b>\t\t\t  <b >Actual Value :</b>  {last_actual_value}  \t\t\t <b>Predicted Value :</b>  {last_predicted_value} \t\t\t <b>Difference(%) : </b>{difference}% ', xaxis=dict(title='Date'), yaxis=dict(title='Price'))
 
     # Combine traces and layout into a figure
     fig = go.Figure(data=[t1, t2], layout=layout)
@@ -144,7 +146,8 @@ def RandomForest_predict(symbol,time_frame='1m'):
     t2 = go.Scatter(x=data.index, y=Randomforest_pred, mode='lines', name="Predicted Close", line=dict(color='red'))
 
     # Create layout for the plot
-    layout = go.Layout(title=f'<b>Stock Price Prediction With Random Forest Model </b>\t\t\t Actual Value : {last_actual_value} \t\t\t Predicted Value : {last_predicted_value} \t\t\t Difference(%) : {difference}% ', xaxis=dict(title='Date'), yaxis=dict(title='Price'))
+    # layout = go.Layout(title=f'<b>Stock Price Prediction With Random Forest Model </b>\t\t\t Actual Value : {last_actual_value} \t\t\t Predicted Value : {last_predicted_value} \t\t\t Difference(%) : {difference}% ', xaxis=dict(title='Date'), yaxis=dict(title='Price'))
+    layout = go.Layout(title=f'<b >Random Forest Model</b>\t\t\t  <b >Actual Value :</b>  {last_actual_value}  \t\t\t <b>Predicted Value :</b>  {last_predicted_value} \t\t\t <b>Difference(%) : </b>{difference}% ', xaxis=dict(title='Date'), yaxis=dict(title='Price'))
 
     # Combine traces and layout into a figure
     fig = go.Figure(data=[t1, t2], layout=layout)

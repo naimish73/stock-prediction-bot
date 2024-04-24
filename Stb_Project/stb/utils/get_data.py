@@ -17,16 +17,18 @@ today = dt.date.today().strftime('%Y-%m-%d 09:15:00+05:30')
 
 
 def yf_data(symbol,timeframe='1m'):
+    try:
+        ticker = yf.Ticker(symbol)
+        """
+        Here we will fetch 1 extra day data so tha we can calculate the indicators values because will calculating it wastw the row as its lenght like sma 200 will pust first 200 rows values nan in its column so to avoid that we will get extra data to work on it and then showing only todays data. 
+        """
+        data = ticker.history(period='2d', interval=timeframe) 
+        data.reset_index(inplace=True)
+    
+        data.drop(columns=['Volume', 'Dividends', 'Stock Splits'],axis=1, inplace=True)
+    except Exception as e:
+        return f"Please Check Your Internet!!! \n\n Exception is {e}"
 
-    ticker = yf.Ticker(symbol)
-    """
-    Here we will fetch 1 extra day data so tha we can calculate the indicators values because will calculating it wastw the row as its lenght like sma 200 will pust first 200 rows values nan in its column so to avoid that we will get extra data to work on it and then showing only todays data. 
-    """
-    data = ticker.history(period='2d', interval=timeframe) 
-    data.reset_index(inplace=True)
-   
-    data.drop(columns=['Volume', 'Dividends', 'Stock Splits'],axis=1, inplace=True)
-   
     return data
 
 def get_info(symbol):
@@ -92,7 +94,7 @@ def create_graph(symbol,CustomStrategy_list=CustomStrategy_list,timeframe='5m'):
     data = yf_data(symbol,timeframe)
 
     """
-    This is for the CustomStrategy_list which contains different indicators and they have diffrent length so we are checking if the length is greated then length of data or greater tha 200 then we will raise an error.
+    This is for the CustomStrategy_list which contains different indicators and they have diffrent length so we are checking if the length is greater then length of data or greater than 200 then we will raise an error.
     """
     for candles in CustomStrategy_list:
         try:
@@ -100,7 +102,7 @@ def create_graph(symbol,CustomStrategy_list=CustomStrategy_list,timeframe='5m'):
                 l=candles['length']
                 if len(data) <l or l>200:
                     print( f"{candles['kind']}_{candles['length']} is not valid !!!!!")
-                    raise KeyError
+                    raise KeyError 
             elif candles['kind'] in ['macd']:
                 pass
         except:
@@ -112,8 +114,10 @@ def create_graph(symbol,CustomStrategy_list=CustomStrategy_list,timeframe='5m'):
         description="SMA 50,200, BBANDS, RSI, MACD and Volume SMA 20",
         ta=CustomStrategy_list
     )
-
-    data.ta.strategy(CustomStrategy)
+    try:
+        data.ta.strategy(CustomStrategy)
+    except Exception as e:
+        return f"Please Check Your Internet \n\n Exception is {e}"
     s = data[data['Datetime'] == today]
     if not s.empty:
         date_index = s.index[0]
@@ -129,13 +133,13 @@ def create_graph(symbol,CustomStrategy_list=CustomStrategy_list,timeframe='5m'):
                                  close=data['Close'],
                                  name='Candlestick')
     
-    rsi = go.Scatter(x=data.Datetime, y=data['RSI_14'], mode='lines', name='RSI 14',yaxis='y3')
+    rsi = go.Scatter(x=data['Datetime'], y=data['RSI_14'], mode='lines', name='RSI 14',yaxis='y3')
     # macd1 = go.Scatter(x=data.Datetime, y=data['MACD_8_21_9'], mode='lines', name='MACD_8_21_9',yaxis='y2')
     # macd2 = go.Scatter(x=data.Datetime, y=data['MACDh_8_21_9'], mode='lines', name='MACDh_8_21_9',yaxis='y2')
     # macd3 = go.Scatter(x=data.Datetime, y=data['MACDs_8_21_9'], mode='lines', name='MACDs_8_21_9',yaxis='y2')
 
-    sma_20 = go.Scatter(x=data.Datetime, y=data['SMA_20'], mode='lines', name='SMA 20')
-    sma_50 = go.Scatter(x=data.Datetime, y=data['SMA_50'], mode='lines', name='SMA 50')
+    sma_20 = go.Scatter(x=data['Datetime'], y=data['SMA_20'], mode='lines', name='SMA 20')
+    sma_50 = go.Scatter(x=data['Datetime'], y=data['SMA_50'], mode='lines', name='SMA 50')
     # sma_200 = go.Scatter(x=data.Datetime, y=data['SMA_200'], mode='lines', name='SMA 200')
 
 
@@ -157,9 +161,14 @@ def create_graph(symbol,CustomStrategy_list=CustomStrategy_list,timeframe='5m'):
     return fig
 
 def quarterly_balance_sheet(symbol):
-    ticker = yf.Ticker(symbol)
-    data = ticker.quarterly_balance_sheet
-    data.fillna(0, inplace=True)
+    try:
+        ticker = yf.Ticker(symbol)
+        data = ticker.quarterly_balance_sheet
+        data.fillna(0, inplace=True)
+    except Exception as e:
+        print(f"Please check Your Internet Connection \n\n Exception : {e}")
+        return f"Please check Your Internet Connection \n\n Exception : {e}"
 
     return data
-print(quarterly_balance_sheet('INFY.NS'))
+
+print(quarterly_balance_sheet('ABCOTS.NS'))

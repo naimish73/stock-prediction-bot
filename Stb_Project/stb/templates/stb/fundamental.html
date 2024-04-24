@@ -1,58 +1,102 @@
-{% extends "stb/index.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 
-{% block title %}Technical Analysis{% endblock %}
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script> 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.js"></script>
 
-{% block content %}
 
 
-<div class="container flex mx-auto">
-  <div class="flex border-2 rounded">
-      <button class="flex items-center justify-center px-4 border-r">
-          <svg class="w-6 h-6 text-gray-600" fill="currentColor" xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24">
-              <path
-                  d="M16.32 14.9l5.39 5.4a1 1 0 0 1-1.42 1.4l-5.38-5.38a8 8 0 1 1 1.41-1.41zM10 16a6 6 0 1 0 0-12 6 6 0 0 0 0 12z">
-              </path>
-          </svg>
-      </button>
-      <form id="autocomplete-form" class="flex">
-        <input type="text" id="autocomplete-input" class="px-4 py-2 w-80" placeholder="Search...">
-        <ul id="autocomplete-list"></ul>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 
-      </form>
+  <title>Fundamental Analysis</title>
+</head>
+<body>
+
+  {% include "stb/navbar.html" %}
+  
+  <div class="Search-companys">
+    
   </div>
-</div>
+  
+  
+  <div class="container px-26 pb-12 mx-auto">
 
-<h1 class="text-3xl py-5 px-16 font-bold"><a href=""> Infy  </a></h1>
+    <div class="flex items-center">
 
-<div class="container w-full  p-8 m-5">
-<table class="table-auto w-full text-left whitespace-no-wrap">
-  <thead>
-    <tr>
-      <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 rounded-tl rounded-bl"> </th>
-        {% for col in Qdata.columns %}
+      <h1 class="text-3xl py-5  font-bold">Search Company : </h1>
+      <form method="GET" name="selected_stock" class="ml-6">
+  
+  
         
-        <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 rounded-tl rounded-bl">{{col}}</th>
+        <select class="ui search dropdown" name="companys">
+            {% for stock in stocks  %}
+            <option value="{{ stock.symbol }}">{{ stock.full_name }}</option>
+            {% endfor %}
+        </select>
+  
+        <script>
+            $('.ui.search.dropdown').dropdown();
+        </script>
+    </form> 
+    </div>
+  {% if company %}
+    <h1 class="text-3xl py-5  font-bold"><a href=""> {{company}}  </a></h1>
+  {% endif %}
+  {% if Qdata|length   %}
+    <table class="ui celled striped table">
+    <thead>
+      <tr>
+        <th class="collapsing">{{company}}</th>
+        {% for col in Qdata.columns %}
+  
+          <th class="collapsing center aligned">{{col}}</th>
+  
         {% endfor %}
+        
       </tr>
     </thead>
+
     <tbody>
 
-      {% for index, row in Qdata.iterrows %}
-      <tr>
-        <td class="border px-4 py-2">{{ index }}</td>  {# Assuming index is required, otherwise remove this line #}
-        {% for value in row %}
-        <td class="border px-4 py-2">{{ value }}</td>
-        {% endfor %}
-      </tr>
-      {% endfor %}
 
+      {% for index, row in Qdata.iterrows %}
+        <tr>
+          <td class="left aligned">{{index}}</td>
+          {% for value in row %}
+            <td class="center aligned">{{value}}</td>
+          
+          {% endfor %}
+          
+        </tr>
+
+      {% endfor %}
+  
     </tbody>
+  
+
+  {% else %}
+
+    <h1 class="text-3xl py-5 text-center text-gray-300 font-bold">Data Not Found</h1>
+
+
+  {% endif %}
+    
   </table>
+
+
+
 </div>
 
+</body>  
+</html>
 
 
 
-{% endblock %}
+
+
