@@ -250,8 +250,7 @@ def fundamental(request):
         company_symbol= request.GET.get('companys')
         
 
-        company = Stock.objects.filter(symbol__icontains=company_symbol).values_list('full_name', flat=True)[0]
-
+    
         if company_symbol:
             try :
                 

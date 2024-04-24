@@ -48,7 +48,7 @@
   {% if company %}
     <h1 class="text-3xl py-5  font-bold"><a href=""> {{company}}  </a></h1>
   {% endif %}
-  {% if Qdata|length   %}
+  {% if Qdata|length  %}
     <table class="ui celled striped table">
     <thead>
       <tr>
@@ -82,7 +82,11 @@
 
   {% else %}
 
-    <h1 class="text-3xl py-5 text-center text-gray-300 font-bold">Data Not Found</h1>
+    {% if request.companys %}
+      <h1 class="text-3xl py-5 text-center text-gray-300 font-bold">Data Not Found</h1>
+    
+    {% endif %}
+
 
 
   {% endif %}

@@ -171,4 +171,4 @@ def quarterly_balance_sheet(symbol):
 
     return data
 
-print(quarterly_balance_sheet('ABCOTS.NS'))
+# print(quarterly_balance_sheet('ABCOTS.NS'))
