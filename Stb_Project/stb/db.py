@@ -10,11 +10,10 @@ from dotenv.main import load_dotenv
 from .models import Stock
 
 
-load_dotenv("/home/rahul/Desktop/Rahul/DE SEM 6/stock-prediction-bot/Stb_Project/.env")
+load_dotenv("stock-prediction-bot/.env")
 
 
 DETA_KEY =  os.getenv('deta_key')
-
 
 
 def fetch_stocks_dec():
@@ -39,7 +38,5 @@ def save_stocks_to_database(stocks):
         # Check if the stock already exists in the database
         if not Stock.objects.filter(symbol=symbol).exists():
             # Create a new Stock object if it doesn't exist
-            stock = Stock(symbol=symbol, company_name=company_name)
+            stock = Stock(symbol=symbol, full_name=company_name)
             stock.save()
-
-

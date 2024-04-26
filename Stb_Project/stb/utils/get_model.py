@@ -4,20 +4,20 @@ import plotly.graph_objects as go
 import pickle
 
 # Load the model from .pkl file
-# model = joblib.load('/home/rahul/Desktop/Rahul/DE SEM 6/stock-prediction-bot/technical_analysis/technical_analysis_model/model_pkl_files/decision_tree_model.pkl')
+# model = joblib.load('../technical_analysis/technical_analysis_model/model_pkl_files/decision_tree_model.pkl')
 
 # Load the model from .pkl file
 
 # Load the model from the pickle file
-with open('/home/rahul/Desktop/Rahul/DE SEM 6/stock-prediction-bot/technical_analysis/technical_analysis_model/model_pkl_files/RandomForestRegressor.pkl', 'rb') as f:
+with open('../technical_analysis/technical_analysis_model/model_pkl_files/RandomForestRegressor.pkl', 'rb') as f:
     Randomforest = pickle.load(f)
 
 
-with open('/home/rahul/Desktop/Rahul/DE SEM 6/stock-prediction-bot/technical_analysis/technical_analysis_model/model_pkl_files/DesicionTreeModel.pkl', 'rb') as f:
+with open('../technical_analysis/technical_analysis_model/model_pkl_files/DesicionTreeModel.pkl', 'rb') as f:
     DecisionTree = pickle.load(f)
 
 
-with open('/home/rahul/Desktop/Rahul/DE SEM 6/stock-prediction-bot/technical_analysis/technical_analysis_model/model_pkl_files/XGBoost.pkl', 'rb') as f:
+with open('../technical_analysis/technical_analysis_model/model_pkl_files/XGBoost.pkl', 'rb') as f:
     XgBoostModel = pickle.load(f)
 
 
