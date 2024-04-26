@@ -4,7 +4,7 @@ import plotly.graph_objects as go
 import pickle
 
 # Load the model from .pkl file
-model = joblib.load('/home/rahul/Desktop/Rahul/DE SEM 6/stock-prediction-bot/technical_analysis/technical_analysis_model/model_pkl_files/decision_tree_model.pkl')
+# model = joblib.load('/home/rahul/Desktop/Rahul/DE SEM 6/stock-prediction-bot/technical_analysis/technical_analysis_model/model_pkl_files/decision_tree_model.pkl')
 
 # Load the model from .pkl file
 
@@ -91,36 +91,36 @@ def DecisionTree_predict(symbol,time_frame='1m'):
     return fig
 
 
-def DecisionTree_model_predict(symbol,time_frame='1m'):
-    # Fetch latest data
-    ticker = yf.Ticker(symbol)
-    data = ticker.history(interval=time_frame, period="1d")
-    data.reset_index(inplace=True)
-    data.drop(columns=['Datetime','Volume', 'Dividends', 'Stock Splits'], inplace=True)
+# def DecisionTree_model_predict(symbol,time_frame='1m'):
+#     # Fetch latest data
+#     ticker = yf.Ticker(symbol)
+#     data = ticker.history(interval=time_frame, period="1d")
+#     data.reset_index(inplace=True)
+#     data.drop(columns=['Datetime','Volume', 'Dividends', 'Stock Splits'], inplace=True)
 
-    # # Prepare data for prediction
-    # X = data[['Open', 'High', 'Low', 'Close']]
+#     # # Prepare data for prediction
+#     # X = data[['Open', 'High', 'Low', 'Close']]
 
-    # Predict using the model
-    DecisionTree_pred = model.predict(data)
-    last_actual_value = data['Close'].iloc[-1]
-    last_predicted_value = DecisionTree_pred[-1]
-    difference = round(((last_actual_value - last_predicted_value)/last_actual_value)*100, 3)
+#     # Predict using the model
+#     DecisionTree_pred = model.predict(data)
+#     last_actual_value = data['Close'].iloc[-1]
+#     last_predicted_value = DecisionTree_pred[-1]
+#     difference = round(((last_actual_value - last_predicted_value)/last_actual_value)*100, 3)
     
 
-    # C lear previous graph
-    # clear_output(wait=True)
+#     # C lear previous graph
+#     # clear_output(wait=True)
 
-    t1 = go.Scatter(x=data.index, y=data['Close'], mode='lines', name="Actual Close", line=dict(color='blue'))
-    t2 = go.Scatter(x=data.index, y=DecisionTree_pred, mode='lines', name="Predicted Close", line=dict(color='red'))
+#     t1 = go.Scatter(x=data.index, y=data['Close'], mode='lines', name="Actual Close", line=dict(color='blue'))
+#     t2 = go.Scatter(x=data.index, y=DecisionTree_pred, mode='lines', name="Predicted Close", line=dict(color='red'))
 
-    # Create layout for the plot
-    # layout = go.Layout(title=f'<b> Decision Tree Model</b> \t\t\t Actual Value : {last_actual_value} \t\t\t Predicted Value : {last_predicted_value} \t\t\t Difference(%) : {difference}% ', xaxis=dict(title='Date'), yaxis=dict(title='Price'))
-    layout = go.Layout(title=f'<b >Decision Tree Model </b>\t\t\t  <b >Actual Value :</b>  {last_actual_value}  \t\t\t <b>Predicted Value :</b>  {last_predicted_value} \t\t\t <b>Difference(%) : </b>{difference}% ', xaxis=dict(title='Date'), yaxis=dict(title='Price'))
+#     # Create layout for the plot
+#     # layout = go.Layout(title=f'<b> Decision Tree Model</b> \t\t\t Actual Value : {last_actual_value} \t\t\t Predicted Value : {last_predicted_value} \t\t\t Difference(%) : {difference}% ', xaxis=dict(title='Date'), yaxis=dict(title='Price'))
+#     layout = go.Layout(title=f'<b >Decision Tree Model </b>\t\t\t  <b >Actual Value :</b>  {last_actual_value}  \t\t\t <b>Predicted Value :</b>  {last_predicted_value} \t\t\t <b>Difference(%) : </b>{difference}% ', xaxis=dict(title='Date'), yaxis=dict(title='Price'))
 
-    # Combine traces and layout into a figure
-    fig = go.Figure(data=[t1, t2], layout=layout)
-    return fig
+#     # Combine traces and layout into a figure
+#     fig = go.Figure(data=[t1, t2], layout=layout)
+#     return fig
 
 def RandomForest_predict(symbol,time_frame='1m'):
     # Fetch latest data
